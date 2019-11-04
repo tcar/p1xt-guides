@@ -14,6 +14,12 @@ require_relative './sqlzoo.rb'
 def physics_no_chemistry
   # In which years was the Physics prize awarded, but no Chemistry prize?
   execute(<<-SQL)
-  select ph.yr, ch.subject from nobels ph, nobels ch 
+  select distinct (a.yr) from nobels a
+  where a.subject = 'Physics'
+  and
+  a.yr not in(
+    select b.yr from nobels b
+    where b.subject = 'Chemistry'
+  )
   SQL
 end
